@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <title>Potato Disease Prediction</title>
+</head>
+<body>
+   <h1>Upload an Image</h1>
+   <form id="uploadForm" enctype="multipart/form-data">
+       <input type="file" name="file" id="fileInput" required />
+       <button type="submit">Upload</button>
+   </form>
+   <div id="response"></div>
+   <script>
+       document.getElementById('uploadForm').onsubmit = async (event) => {
+           event.preventDefault();
+           const formData = new FormData();
+           formData.append('file', document.getElementById('fileInput').files[0]);
+
+           const responseDiv = document.getElementById('response');
+           responseDiv.textContent = 'Uploading...';
+
+           try {
+               const response = await fetch('/upload', {
+                   method: 'POST',
+                   body: formData,
+               });
+               const result = await response.json();
+               responseDiv.textContent = `Prediction: ${result.predicted_label}`;
+           } catch (error) {
+               responseDiv.textContent = 'Error predicting the class.';
+           }
+       };
+   </script>
+</body>
+</html>
